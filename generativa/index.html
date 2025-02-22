@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmo Genético - Besouros</title>
+    <link rel="stylesheet" href="./genetico.css">
+</head>
+
+<body>
+    <h1>População Inicial de Besouros</h1>
+    <button id="generateBtn">Gerar População</button>
+    <div id="container"></div>
+
+    <section id="roleta-hidde">
+        <div class="roleta-container">
+            <h2>Seleção por Roleta</h2>
+            <div class="roleta-wrapper">
+                <div class="infor-roleta">
+                    <canvas id="roletaCanvas" width="300" height="300"></canvas>
+                </div>
+                <div class="pointer"></div>
+            </div>
+            <button id="spinBtn">Girar Roleta</button>
+        </div>
+        <h2>Nova Geração de Seleção</h2>
+        <div id="new-generation"></div>
+
+        <h2>Cross-Over</h2>
+        <div>
+            <button id="offspringBtn">Gerar Nova Geração</button>
+            <div id="new-generation-cross-over"></div>
+        </div>
+
+        <h2>Nova Geração de Cross-Over</h2>
+        <div id="new-generation-mutacao"></div>
+       
+        <div>
+            <button id="mutateBtn">Gerar Mutação</button>
+            <div id="new-generation-genetico"></div>
+        </div>
+    
+    </section>
+
+    <script src="./roleta.js"></script>
+    <script src="./crossOver.js"></script>
+    <script src="./mutacao.js"></script>
+</body>
+
+</html>

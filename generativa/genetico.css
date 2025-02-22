@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#container,
+#new-generation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.beetle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 10px;
+    display: inline-block;
+}
+
+.roleta-container {
+    margin-top: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 20px solid red;
+    z-index: 10;
+}
+
+.roleta-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 40px;
+}
+
+#roletaCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#new-generation {
+    margin-top: 30px;
+}
+
+#roleta-hidde {
+    display: none;
+}
+
+.infor-roleta {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-88deg);
+}
