@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrupamento de Clientes - Machine Learning</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            background-color: white;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        canvas {
+            margin-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Agrupamento de Clientes (Aprendizagem Não Supervisionada)</h2>
+        <p>Insira os dados de um novo cliente para ver em qual grupo ele pertence.</p>
+        
+        <input type="number" id="visitasInput" placeholder="Frequência de Visitas (dias/mês)">
+        <input type="number" id="gastoInput" placeholder="Gasto Mensal (R$)">
+        <button onclick="classificarCliente()">Classificar Cliente</button>
+
+        <h3 id="resultado"></h3>
+
+        <canvas id="grafico"></canvas>
+    </div>
+
+    <script>
+        // Dados iniciais (Clientes existentes)
+        const clientes = [
+            { nome: "Cliente A", visitas: 2, gasto: 150, grupo: "Econômicos" },
+            { nome: "Cliente B", visitas: 10, gasto: 1200, grupo: "VIPs" },
+            { nome: "Cliente C", visitas: 8, gasto: 850, grupo: "Regulares" },
+            { nome: "Cliente D", visitas: 3, gasto: 200, grupo: "Econômicos" },
+            { nome: "Cliente E", visitas: 9, gasto: 1000, grupo: "Regulares" },
+            { nome: "Cliente F", visitas: 4, gasto: 350, grupo: "Econômicos" }
+        ];
+
+        function classificarCliente() {
+            let visitas = parseInt(document.getElementById("visitasInput").value);
+            let gasto = parseInt(document.getElementById("gastoInput").value);
+            
+            let grupo = "";
+
+            if (visitas <= 4 && gasto <= 400) {
+                grupo = "Econômicos 💰";
+            } else if (visitas >= 8 && gasto >= 800) {
+                grupo = "Regulares 🛍️";
+            } else if (visitas >= 10 && gasto >= 1000) {
+                grupo = "VIPs 👑";
+            } else {
+                grupo = "Intermediário 🔍 (Ainda não categorizado)";
+            }
+
+            document.getElementById("resultado").innerText = `Este cliente pertence ao grupo: ${grupo}`;
+
+            atualizarGrafico(visitas, gasto, grupo);
+        }
+
+        // Criando gráfico com Chart.js
+        let ctx = document.getElementById("grafico").getContext("2d");
+        let grafico = new Chart(ctx, {
+            type: "scatter",
+            data: {
+                datasets: [
+                    {
+                        label: "Econômicos 💰",
+                        data: clientes.filter(c => c.grupo === "Econômicos").map(c => ({ x: c.visitas, y: c.gasto })),
+                        backgroundColor: "blue",
+                        pointRadius: 6
+                    },
+                    {
+                        label: "Regulares 🛍️",
+                        data: clientes.filter(c => c.grupo === "Regulares").map(c => ({ x: c.visitas, y: c.gasto })),
+                        backgroundColor: "green",
+                        pointRadius: 6
+                    },
+                    {
+                        label: "VIPs 👑",
+                        data: clientes.filter(c => c.grupo === "VIPs").map(c => ({ x: c.visitas, y: c.gasto })),
+                        backgroundColor: "gold",
+                        pointRadius: 6
+                    },
+                    {
+                        label: "Novo Cliente 🔴",
+                        data: [],
+                        backgroundColor: "red",
+                        pointRadius: 8
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: "Frequência de Visitas (dias/mês)" }, min: 0, max: 12 },
+                    y: { title: { display: true, text: "Gasto Mensal (R$)" }, min: 0, max: 1500 }
+                }
+            }
+        });
+
+        function atualizarGrafico(visitas, gasto, grupo) {
+            let cor = grupo.includes("Econômicos") ? "blue" :
+                      grupo.includes("Regulares") ? "green" :
+                      grupo.includes("VIPs") ? "gold" : "gray";
+
+            grafico.data.datasets[3].data = [{ x: visitas, y: gasto }];
+            grafico.data.datasets[3].backgroundColor = cor;
+            grafico.update();
+        }
+    </script>
+
+</body>
+</html>
