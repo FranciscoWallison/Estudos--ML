@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previsão de Notas com Machine Learning</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        canvas {
+            margin-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Previsão de Notas com Regressão Linear</h2>
+        <p>Insira o número de horas de estudo para prever a nota final:</p>
+        <input type="number" id="horasInput" placeholder="Horas de estudo">
+        <button onclick="preverNota()">Prever Nota</button>
+        <h3 id="resultado"></h3>
+        <canvas id="grafico"></canvas>
+    </div>
+
+    <script>
+        // Dados de treino (Horas de estudo e notas)
+        const horas = [1, 2, 3, 4]; // X (variável independente)
+        const notas = [2, 4, 6, 8]; // Y (variável dependente)
+
+        // Cálculo da regressão linear: Y = aX + b
+        const a = 2;  // Coeficiente angular
+        const b = 0;  // Intercepto
+
+        function preverNota() {
+            let horasEstudo = document.getElementById("horasInput").value;
+            let notaPrevista = a * horasEstudo + b;
+            
+            document.getElementById("resultado").innerText = `Nota Prevista: ${notaPrevista.toFixed(2)}`;
+            
+            // Adiciona a previsão ao gráfico
+            atualizarGrafico(horasEstudo, notaPrevista);
+        }
+
+        // Criando gráfico com Chart.js
+        let ctx = document.getElementById("grafico").getContext("2d");
+        let grafico = new Chart(ctx, {
+            type: "scatter",
+            data: {
+                datasets: [
+                    {
+                        label: "Dados de Treino",
+                        data: horas.map((h, i) => ({ x: h, y: notas[i] })),
+                        backgroundColor: "blue",
+                        pointRadius: 5
+                    },
+                    {
+                        label: "Previsão",
+                        data: [],
+                        backgroundColor: "red",
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: "Horas de Estudo" }, min: 0, max: 10 },
+                    y: { title: { display: true, text: "Nota Final" }, min: 0, max: 20 }
+                }
+            }
+        });
+
+        function atualizarGrafico(horasEstudo, notaPrevista) {
+            grafico.data.datasets[1].data = [{ x: horasEstudo, y: notaPrevista }];
+            grafico.update();
+        }
+    </script>
+
+</body>
+</html>
