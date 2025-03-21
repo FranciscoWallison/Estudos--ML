@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Desafio: Ligar o Carro (MDP)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f5f5f5;
+      padding-top: 50px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      margin-top: 20px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .formula {
+      font-family: monospace;
+      background-color: #eee;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔋 Desafio MDP: Ligar o Carro</h2>
+    <p>Pressione o botão abaixo para tentar ligar o carro.</p>
+    <p class="formula">P(s₁ | s₀, a₀) = 0.9<br>P(s₀ | s₀, a₀) = 0.1</p>
+
+    <button onclick="ligarCarro()">Ligar o Carro</button>
+
+    <div class="result" id="resultado"></div>
+    <div class="formula" id="calculo"></div>
+  </div>
+
+  <script>
+    function ligarCarro() {
+      const chanceDeLigar = 0.9;
+      const sorteio = Math.random(); // número entre 0 e 1
+
+      let resultado = '';
+      let calculo = `Sorteio: ${sorteio.toFixed(3)}<br>`;
+
+      if (sorteio <= chanceDeLigar) {
+        resultado = '✅ O carro LIGOU com sucesso! (estado s₁)';
+        calculo += `Como ${sorteio.toFixed(3)} ≤ 0.9 → transição para s₁`;
+      } else {
+        resultado = '❌ O carro FALHOU ao ligar! (estado s₀)';
+        calculo += `Como ${sorteio.toFixed(3)} > 0.9 → permanece em s₀`;
+      }
+
+      document.getElementById("resultado").innerHTML = resultado;
+      document.getElementById("calculo").innerHTML = calculo;
+    }
+  </script>
+</body>
+</html>
