@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz de Machine Learning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+    #quiz-container {
+      background: #fff;
+      padding: 20px;
+      max-width: 750px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+    .options li {
+      margin-bottom: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <div id="question-box">
+      <div class="question" id="question"></div>
+      <ul class="options" id="options"></ul>
+      <button onclick="nextQuestion()">Próxima</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Qual é o objetivo principal da Regressão Linear?",
+        options: [
+          "Prever valores contínuos com base em variáveis independentes.",
+          "Classificar imagens.",
+          "Agrupar dados não rotulados.",
+          "Treinar uma rede neural com várias camadas."
+        ],
+        answer: 0
+      },
+      {
+        question: "O que o perceptron gera como saída?",
+        options: [
+          "Um valor contínuo.",
+          "Um grupo de palavras.",
+          "Um número entre 0 e 1.",
+          "Um valor binário, como 0 ou 1."
+        ],
+        answer: 3
+      },
+      {
+        question: "Qual é a função do bias no perceptron?",
+        options: [
+          "Reduzir o erro.",
+          "Ajustar a curva de ativação.",
+          "Aumentar o número de entradas.",
+          "Ajudar a ajustar o limiar de decisão."
+        ],
+        answer: 3
+      },
+      {
+        question: "O que é Aprendizado por Reforço?",
+        options: [
+          "Aprendizado supervisionado com muitos rótulos.",
+          "Aprendizado baseado em tentativa e erro com recompensas.",
+          "Aprendizado com redes neurais profundas.",
+          "Aprendizado baseado em agrupamento não supervisionado."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que representa a função de fitness em um Algoritmo Genético?",
+        options: [
+          "Tempo de execução.",
+          "Qualidade de uma solução.",
+          "Número de mutações.",
+          "Número de genes trocados."
+        ],
+        answer: 1
+      },
+      {
+        question: "Durante o cross-over, o que ocorre entre os indivíduos?",
+        options: [
+          "Eliminação dos piores.",
+          "Mutação genética aleatória.",
+          "Troca de partes dos dados para criar novos.",
+          "Avaliação de desempenho."
+        ],
+        answer: 2
+      },
+      {
+        question: "Qual das opções é um exemplo de aprendizado supervisionado?",
+        options: [
+          "Agrupamento de clientes.",
+          "Previsão de notas de alunos.",
+          "Segmentação de imagens sem rótulos.",
+          "Análise de sentimentos sem dados rotulados."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que é overfitting?",
+        options: [
+          "Quando o modelo ignora os dados.",
+          "Quando o modelo aprende demais os dados de treino, sem generalizar bem.",
+          "Quando os dados estão em excesso.",
+          "Quando há poucas variáveis no modelo."
+        ],
+        answer: 1
+      },
+      {
+        question: "Qual das alternativas é um exemplo de aprendizado não supervisionado?",
+        options: [
+          "Previsão de notas de alunos.",
+          "Classificação de e-mails como spam.",
+          "Agrupamento de consumidores por comportamento de compra.",
+          "Reconhecimento facial com base em rótulos."
+        ],
+        answer: 2
+      },
+      {
+        question: "O que faz a mutação em um Algoritmo Genético?",
+        options: [
+          "Cria uma nova população.",
+          "Avalia o fitness.",
+          "Garante diversidade genética.",
+          "Remove indivíduos não aptos."
+        ],
+        answer: 2
+      },
+      {
+        question: "Em Regressão Linear, qual é o coeficiente angular?",
+        options: [
+          "Valor de interceptação.",
+          "Peso que define a inclinação da reta.",
+          "Número de gerações.",
+          "Taxa de erro do modelo."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que é um modelo supervisionado?",
+        options: [
+          "Aprende a partir de dados rotulados.",
+          "Explora o ambiente sem retorno.",
+          "Recebe recompensas e punições.",
+          "Cria agrupamentos a partir de dados desconhecidos."
+        ],
+        answer: 0
+      },
+      {
+        question: "Qual é o papel da função de ativação no perceptron?",
+        options: [
+          "Determinar a saída com base no valor de entrada.",
+          "Normalizar os dados.",
+          "Ajustar pesos automaticamente.",
+          "Separar classes com base em rótulos."
+        ],
+        answer: 0
+      },
+      {
+        question: "A técnica de seleção por roleta em Algoritmo Genético:",
+        options: [
+          "Seleciona aleatoriamente.",
+          "Dá mais chance aos menos aptos.",
+          "Ignora os melhores indivíduos.",
+          "Dá mais chances aos melhores indivíduos."
+        ],
+        answer: 3
+      },
+      {
+        question: "Qual das alternativas descreve o Q-Learning?",
+        options: [
+          "Classifica imagens com CNN.",
+          "Prediz valores contínuos.",
+          "Aprende a melhor ação por meio de recompensas.",
+          "Agrupa dados por similaridade."
+        ],
+        answer: 2
+      },
+      {
+        question: "O que representa o erro em um Perceptron?",
+        options: [
+          "Diferença entre o esperado e o predito.",
+          "Soma dos pesos.",
+          "Total de acertos.",
+          "Número de entradas."
+        ],
+        answer: 0
+      },
+      {
+        question: "A saída da Regressão Linear é:",
+        options: [
+          "Um rótulo categórico.",
+          "Um valor contínuo.",
+          "Um grupo de dados.",
+          "Uma rede neural."
+        ],
+        answer: 1
+      },
+      {
+        question: "Em qual tipo de problema é ideal aplicar Regressão Linear?",
+        options: [
+          "Agrupamento de imagens.",
+          "Previsão de temperatura.",
+          "Classificação de espécies.",
+          "Recompensa de jogos."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que é o Perceptron Multicamadas?",
+        options: [
+          "Uma regressão com mais variáveis.",
+          "Um algoritmo genético com camadas.",
+          "Rede Neural com pelo menos uma camada oculta.",
+          "Rede supervisionada sem pesos."
+        ],
+        answer: 2
+      },
+      {
+        question: "A aprendizagem por reforço é útil quando:",
+        options: [
+          "Temos rótulos definidos.",
+          "Precisamos agrupar dados.",
+          "O agente deve aprender com recompensas interagindo com o ambiente.",
+          "Queremos prever valores contínuos."
+        ],
+        answer: 2
+      },
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").textContent = `(${currentQuestion + 1}/${questions.length}) ${q.question}`;
+      const optionsList = document.getElementById("options");
+      optionsList.innerHTML = "";
+
+      q.options.forEach((opt, idx) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<label><input type="radio" name="option" value="${idx}"> ${opt}</label>`;
+        optionsList.appendChild(li);
+      });
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("Selecione uma opção!");
+        return;
+      }
+
+      const answer = parseInt(selected.value);
+      if (answer === questions[currentQuestion].answer) {
+        score++;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("question-box").innerHTML = `
+          <h2>Quiz Finalizado!</h2>
+          <p>Sua pontuação foi: <strong>${score}</strong> de ${questions.length}</p>
+        `;
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
