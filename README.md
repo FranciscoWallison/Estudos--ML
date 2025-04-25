@@ -98,7 +98,7 @@ git commit -m "ADS-init: <sua_matricula> ML"
 - **Forma de entrega:** Link do repositório (GitHub, GitLab ou pasta zipada via Drive compartilhado).
 
 
-> Data de entrega: **06/05/2025** (segunda-feira)  
+> Data de entrega: **02/05/2025** (sexta-feira)  
 >  
 > Peço, por favor, que até essa data o seu tema já esteja commitando no repositorio no github
 >  
