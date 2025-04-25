@@ -7,7 +7,7 @@ Aplicar conceitos de **Machine Learning** e **Aprendizado por Reforço** (Reinfo
 
 ---
 
-## ✅ **Regras Gerais:**
+## **Regras Gerais:**
 
 - O **tema do projeto é livre**, mas deve obrigatoriamente ter **relação com aprendizado de máquina** (ex.: ambientes, MDPs, Q-Learning, SARSA, Aprendizagem Supervisionada ou Não Supervisionada, etc.).
 - A entrega deve incluir:
@@ -98,7 +98,7 @@ git commit -m "ADS-init: <sua_matricula> ML"
 - **Forma de entrega:** Link do repositório (GitHub, GitLab ou pasta zipada via Drive compartilhado).
 
 
-> ✅ Data de entrega: **06/05/2025** (segunda-feira)  
+> Data de entrega: **06/05/2025** (segunda-feira)  
 >  
 > Peço, por favor, que até essa data o seu tema já esteja commitando no repositorio no github
 >  
@@ -108,7 +108,7 @@ git commit -m "ADS-init: <sua_matricula> ML"
 
 ---
 
-## 🧠 **Critérios de Avaliação:**
+## **Critérios de Avaliação:**
 
 | Critério                          | Peso   |
 |------------------------------------|--------|
@@ -121,7 +121,7 @@ git commit -m "ADS-init: <sua_matricula> ML"
 ### Só irei aceitar com tudo feito se não quiser fazer o desafio pode fazer av2.
 
 
-## 🚨 **Política de Integridade Acadêmica:**
+## **Política de Integridade Acadêmica:**
 
 - Trabalhos entregues **sem entendimento claro do aluno** poderão ser anulados mediante questionamento.
 - Projetos **copiados de outros colegas** ou **plagiados da internet** serão **zerados**.
