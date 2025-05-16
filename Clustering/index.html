@@ -2,28 +2,37 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>K-Means Clustering Visual</title>
+  <title>Clustering Interativo com K-Means</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       text-align: center;
-      margin: 0;
-      background-color: #f5f5f5;
+      background: #f0f0f0;
+      padding: 20px;
     }
     canvas {
       border: 1px solid #ccc;
-      background: white;
+      background: #fff;
+      margin-top: 10px;
+    }
+    .controls {
       margin-top: 20px;
     }
+    label {
+      margin: 0 10px;
+    }
+    input[type="range"] {
+      width: 150px;
+    }
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
+      padding: 10px 15px;
+      margin: 10px;
+      font-size: 14px;
       cursor: pointer;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
     }
     button:hover {
       background-color: #0056b3;
@@ -31,23 +40,44 @@
   </style>
 </head>
 <body>
-  <h1>K-Means Clustering (Visual)</h1>
-  <p>Exemplo de agrupamento automático de pontos com base em proximidade</p>
-  <button onclick="startClustering()">Gerar Clusters</button>
-  <br />
+  <h1>K-Means Clustering Interativo</h1>
+  <p>Ajuste o número de clusters e veja como os dados são agrupados automaticamente.</p>
+
+  <div class="controls">
+    <label>Clusters (K): <span id="kValue">3</span></label>
+    <input type="range" min="2" max="10" value="3" id="kInput" oninput="updateK()">
+    
+    <label>Iterações: <span id="itValue">10</span></label>
+    <input type="range" min="1" max="30" value="10" id="itInput" oninput="updateIteracoes()">
+  </div>
+
+  <button onclick="startClustering()">Iniciar Clustering</button>
+  <button onclick="gerarPontos()">Gerar Novos Pontos</button>
+
   <canvas id="canvas" width="500" height="500"></canvas>
 
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    const NUM_POINTS = 100;
-    const K = 3;
-    const points = [];
+    let NUM_POINTS = 100;
+    let K = 3;
+    let MAX_IT = 10;
+    let points = [];
     let centroids = [];
 
+    function updateK() {
+      K = parseInt(document.getElementById("kInput").value);
+      document.getElementById("kValue").textContent = K;
+    }
+
+    function updateIteracoes() {
+      MAX_IT = parseInt(document.getElementById("itInput").value);
+      document.getElementById("itValue").textContent = MAX_IT;
+    }
+
     function gerarPontos() {
-      points.length = 0;
+      points = [];
       for (let i = 0; i < NUM_POINTS; i++) {
         points.push({
           x: Math.random() * canvas.width,
@@ -55,6 +85,7 @@
           cluster: null,
         });
       }
+      desenhar();
     }
 
     function inicializarCentroides() {
@@ -71,15 +102,13 @@
     function desenhar() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Desenha pontos
-      for (let point of points) {
-        ctx.fillStyle = centroids[point.cluster]?.color || "#000";
+      for (let p of points) {
+        ctx.fillStyle = centroids[p.cluster]?.color || "#000";
         ctx.beginPath();
-        ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+        ctx.arc(p.x, p.y, 5, 0, 2 * Math.PI);
         ctx.fill();
       }
 
-      // Desenha centroides
       for (let c of centroids) {
         ctx.fillStyle = c.color;
         ctx.beginPath();
@@ -119,21 +148,19 @@
     }
 
     function startClustering() {
-      gerarPontos();
       inicializarCentroides();
-
       let iteracoes = 0;
       const loop = setInterval(() => {
         atribuirClusters();
         atualizarCentroides();
         desenhar();
         iteracoes++;
-
-        if (iteracoes >= 10) clearInterval(loop);
+        if (iteracoes >= MAX_IT) clearInterval(loop);
       }, 500);
     }
 
-    desenhar();
+    // Inicializar ao carregar
+    gerarPontos();
   </script>
 </body>
 </html>
