@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>K-Means Clustering Visual</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      background: white;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>K-Means Clustering (Visual)</h1>
+  <p>Exemplo de agrupamento automático de pontos com base em proximidade</p>
+  <button onclick="startClustering()">Gerar Clusters</button>
+  <br />
+  <canvas id="canvas" width="500" height="500"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const NUM_POINTS = 100;
+    const K = 3;
+    const points = [];
+    let centroids = [];
+
+    function gerarPontos() {
+      points.length = 0;
+      for (let i = 0; i < NUM_POINTS; i++) {
+        points.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          cluster: null,
+        });
+      }
+    }
+
+    function inicializarCentroides() {
+      centroids = [];
+      for (let i = 0; i < K; i++) {
+        centroids.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          color: `hsl(${(i * 360) / K}, 100%, 50%)`,
+        });
+      }
+    }
+
+    function desenhar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Desenha pontos
+      for (let point of points) {
+        ctx.fillStyle = centroids[point.cluster]?.color || "#000";
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      // Desenha centroides
+      for (let c of centroids) {
+        ctx.fillStyle = c.color;
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, 8, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = "#333";
+        ctx.stroke();
+      }
+    }
+
+    function atribuirClusters() {
+      for (let p of points) {
+        let minDist = Infinity;
+        let index = 0;
+        for (let i = 0; i < centroids.length; i++) {
+          const c = centroids[i];
+          const dist = Math.hypot(p.x - c.x, p.y - c.y);
+          if (dist < minDist) {
+            minDist = dist;
+            index = i;
+          }
+        }
+        p.cluster = index;
+      }
+    }
+
+    function atualizarCentroides() {
+      for (let i = 0; i < K; i++) {
+        const grupo = points.filter(p => p.cluster === i);
+        if (grupo.length > 0) {
+          const xMedio = grupo.reduce((sum, p) => sum + p.x, 0) / grupo.length;
+          const yMedio = grupo.reduce((sum, p) => sum + p.y, 0) / grupo.length;
+          centroids[i].x = xMedio;
+          centroids[i].y = yMedio;
+        }
+      }
+    }
+
+    function startClustering() {
+      gerarPontos();
+      inicializarCentroides();
+
+      let iteracoes = 0;
+      const loop = setInterval(() => {
+        atribuirClusters();
+        atualizarCentroides();
+        desenhar();
+        iteracoes++;
+
+        if (iteracoes >= 10) clearInterval(loop);
+      }, 500);
+    }
+
+    desenhar();
+  </script>
+</body>
+</html>
