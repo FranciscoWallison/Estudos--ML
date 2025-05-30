@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz de Machine Learning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+
+    #quiz-container {
+      background: #fff;
+      padding: 20px;
+      max-width: 750px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .question {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+
+    .options li {
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="quiz-container">
+    <div id="question-box">
+      <div class="question" id="question"></div>
+      <ul class="options" id="options"></ul>
+      <button onclick="nextQuestion()">Próxima</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Qual técnica é usada para agrupar dados sem rótulos (aprendizado não supervisionado)?",
+        options: [
+          "Regressão Linear",
+          "Árvores de Decisão",
+          "Classificação Binária",
+          "Clustering",
+          "MLP"
+        ],
+        answer: 3
+      },
+      {
+        question: "Árvores de decisão são úteis porque...",
+        options: [
+          "São modelos paramétricos e fixos",
+          "Sempre seguem lógica linear",
+          "Não funcionam com classificações",
+          "Reduzem o espaço de busca com decisões hierárquicas",
+          "Não são aplicáveis a problemas médicos"
+        ],
+        answer: 3
+      },
+      {
+        question: "Para reduzir variáveis mantendo a essência dos dados, aplicamos...",
+        options: [
+          "Aumento de variáveis",
+          "Eliminação total das correlações",
+          "Redução de dimensionalidade",
+          "Regressão linear com todas as variáveis",
+          "Substituição por métodos estatísticos tradicionais"
+        ],
+        answer: 2
+      },
+      {
+        question: "Qual modelo é ideal para classificar imagens rotuladas como 'gato' ou 'cachorro'?",
+        options: [
+          "Clustering",
+          "DummyClassifier",
+          "Perceptron de Múltiplas Camadas (MLP)",
+          "PCA",
+          "Naive Bayes"
+        ],
+        answer: 2
+      },
+      {
+        question: "Qual algoritmo permite o aprendizado do MLP ajustando pesos pelo erro?",
+        options: [
+          "Aprendizagem por reforço",
+          "Clustering",
+          "Retropropagação (Backpropagation)",
+          "K-means",
+          "Bayesiano"
+        ],
+        answer: 2
+      },
+      {
+        question: "Quando usar modelos não paramétricos?",
+        options: [
+          "Quando os dados seguem distribuição conhecida",
+          "Quando os dados têm distribuição normal",
+          "Quando são dados simples e lineares",
+          "Quando a distribuição é desconhecida e os dados são irregulares",
+          "Quando aplicamos apenas média e desvio"
+        ],
+        answer: 3
+      },
+      {
+        question: "Mesmo com alta acurácia, um teste pode indicar baixa chance real de doença quando (Bayesiana)",
+        options: [
+          "A sensibilidade é 100%",
+          "A incidência da doença é alta",
+          "A doença é rara (baixa prevalência)",
+          "O teste usa muitos dados",
+          "O Teorema de Bayes não é aplicado"
+        ],
+        answer: 2
+      },
+      {
+        question: "O Clustering agrupa dados baseado em...",
+        options: [
+          "Rótulos definidos previamente",
+          "Códigos fixos para cada grupo",
+          "Semelhanças, sem usar rótulos",
+          "Dados supervisionados",
+          "Uma estrutura rígida de classes"
+        ],
+        answer: 2
+      },
+      {
+        question: "Qual técnica é mais adequada para um agente aprender jogando com recompensas e punições?",
+        options: [
+          "Regressão Linear",
+          "KNN",
+          "Árvore de Decisão",
+          "Q-Learning",
+          "Clustering"
+        ],
+        answer: 3
+      },
+      {
+        question: "Modelos não paramétricos são ideais quando...",
+        options: [
+          "Já conhecemos a forma dos dados",
+          "Precisamos usar média e desvio padrão",
+          "Os dados seguem uma distribuição exata",
+          "A forma dos dados é desconhecida ou flexível",
+          "Precisamos de uma equação pronta"
+        ],
+        answer: 3
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").textContent = `(${currentQuestion + 1}/${questions.length}) ${q.question}`;
+      const optionsList = document.getElementById("options");
+      optionsList.innerHTML = "";
+
+      q.options.forEach((opt, idx) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<label><input type="radio" name="option" value="${idx}"> ${opt}</label>`;
+        optionsList.appendChild(li);
+      });
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("Selecione uma opção!");
+        return;
+      }
+
+      const answer = parseInt(selected.value);
+      if (answer === questions[currentQuestion].answer) {
+        score++;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("question-box").innerHTML = `
+        <h2>Quiz Finalizado!</h2>
+        <p>Sua pontuação foi: <strong>${score}</strong> de ${questions.length}</p>
+      `;
+      }
+    }
+
+    showQuestion();
+  </script>
+
+</body>
+
+</html>
