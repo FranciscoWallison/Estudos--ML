@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz de Machine Learning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+
+    #quiz-container {
+      background: #fff;
+      padding: 20px;
+      max-width: 750px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .question {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+
+    .options li {
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="quiz-container">
+    <div id="question-box">
+      <div class="question" id="question"></div>
+      <ul class="options" id="options"></ul>
+      <button onclick="nextQuestion()">Próxima</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Qual é o objetivo principal da Regressão Linear?",
+        options: [
+          "Prever valores contínuos com base em variáveis independentes.",
+          "Classificar imagens.",
+          "Agrupar dados não rotulados.",
+          "Treinar uma rede neural com várias camadas."
+        ],
+        answer: 0
+      },
+      {
+        question: "O que o perceptron gera como saída?",
+        options: [
+          "Um valor contínuo.",
+          "Um grupo de palavras.",
+          "Um número entre 0 e 1.",
+          "Um valor binário, como 0 ou 1."
+        ],
+        answer: 3
+      },
+      {
+        question: "Qual é a função do bias no perceptron?",
+        options: [
+          "Reduzir o erro.",
+          "Ajustar a curva de ativação.",
+          "Aumentar o número de entradas.",
+          "Ajudar a ajustar o limiar de decisão."
+        ],
+        answer: 3
+      },
+      {
+        question: "O que é Aprendizado por Reforço?",
+        options: [
+          "Aprendizado supervisionado com muitos rótulos.",
+          "Aprendizado baseado em tentativa e erro com recompensas.",
+          "Aprendizado com redes neurais profundas.",
+          "Aprendizado baseado em agrupamento não supervisionado."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que representa a função de fitness em um Algoritmo Genético?",
+        options: [
+          "Tempo de execução.",
+          "Qualidade de uma solução.",
+          "Número de mutações.",
+          "Número de genes trocados."
+        ],
+        answer: 1
+      },
+      {
+        question: "Durante o cross-over, o que ocorre entre os indivíduos?",
+        options: [
+          "Eliminação dos piores.",
+          "Mutação genética aleatória.",
+          "Troca de partes dos dados para criar novos.",
+          "Avaliação de desempenho."
+        ],
+        answer: 2
+      },
+      {
+        question: "Qual das opções é um exemplo de aprendizado supervisionado?",
+        options: [
+          "Agrupamento de clientes.",
+          "Previsão de notas de alunos.",
+          "Segmentação de imagens sem rótulos.",
+          "Análise de sentimentos sem dados rotulados."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que é overfitting?",
+        options: [
+          "Quando o modelo ignora os dados.",
+          "Quando o modelo aprende demais os dados de treino, sem generalizar bem.",
+          "Quando os dados estão em excesso.",
+          "Quando há poucas variáveis no modelo."
+        ],
+        answer: 1
+      },
+      {
+        question: "Qual das alternativas é um exemplo de aprendizado não supervisionado?",
+        options: [
+          "Previsão de notas de alunos.",
+          "Classificação de e-mails como spam.",
+          "Agrupamento de consumidores por comportamento de compra.",
+          "Reconhecimento facial com base em rótulos."
+        ],
+        answer: 2
+      },
+      {
+        question: "O que faz a mutação em um Algoritmo Genético?",
+        options: [
+          "Cria uma nova população.",
+          "Avalia o fitness.",
+          "Garante diversidade genética.",
+          "Remove indivíduos não aptos."
+        ],
+        answer: 2
+      },
+      {
+        question: "Em Regressão Linear, qual é o coeficiente angular?",
+        options: [
+          "Valor de interceptação.",
+          "Peso que define a inclinação da reta.",
+          "Número de gerações.",
+          "Taxa de erro do modelo."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que é um modelo supervisionado?",
+        options: [
+          "Aprende a partir de dados rotulados.",
+          "Explora o ambiente sem retorno.",
+          "Recebe recompensas e punições.",
+          "Cria agrupamentos a partir de dados desconhecidos."
+        ],
+        answer: 0
+      },
+      {
+        question: "Qual é o papel da função de ativação no perceptron?",
+        options: [
+          "Determinar a saída com base no valor de entrada.",
+          "Normalizar os dados.",
+          "Ajustar pesos automaticamente.",
+          "Separar classes com base em rótulos."
+        ],
+        answer: 0
+      },
+      {
+        question: "A técnica de seleção por roleta em Algoritmo Genético:",
+        options: [
+          "Seleciona aleatoriamente.",
+          "Dá mais chance aos menos aptos.",
+          "Ignora os melhores indivíduos.",
+          "Dá mais chances aos melhores indivíduos."
+        ],
+        answer: 3
+      },
+      {
+        question: "Qual das alternativas descreve o Q-Learning?",
+        options: [
+          "Classifica imagens com CNN.",
+          "Prediz valores contínuos.",
+          "Aprende a melhor ação por meio de recompensas.",
+          "Agrupa dados por similaridade."
+        ],
+        answer: 2
+      },
+      {
+        question: "O que representa o erro em um Perceptron?",
+        options: [
+          "Diferença entre o esperado e o predito.",
+          "Soma dos pesos.",
+          "Total de acertos.",
+          "Número de entradas."
+        ],
+        answer: 0
+      },
+      {
+        question: "A saída da Regressão Linear é:",
+        options: [
+          "Um rótulo categórico.",
+          "Um valor contínuo.",
+          "Um grupo de dados.",
+          "Uma rede neural."
+        ],
+        answer: 1
+      },
+      {
+        question: "Em qual tipo de problema é ideal aplicar Regressão Linear?",
+        options: [
+          "Agrupamento de imagens.",
+          "Previsão de temperatura.",
+          "Classificação de espécies.",
+          "Recompensa de jogos."
+        ],
+        answer: 1
+      },
+      {
+        question: "O que é o Perceptron Multicamadas?",
+        options: [
+          "Uma regressão com mais variáveis.",
+          "Um algoritmo genético com camadas.",
+          "Rede Neural com pelo menos uma camada oculta.",
+          "Rede supervisionada sem pesos."
+        ],
+        answer: 2
+      },
+      {
+        question: "A aprendizagem por reforço é útil quando:",
+        options: [
+          "Temos rótulos definidos.",
+          "Precisamos agrupar dados.",
+          "O agente deve aprender com recompensas interagindo com o ambiente.",
+          "Queremos prever valores contínuos."
+        ],
+        answer: 2
+      },
+      {
+        question: "No projeto 'OtimizaLog', por que usar uma Meta-Heurística em vez de testar todas as combinações possíveis?",
+        options: [
+          "Porque garante a solução ótima em todos os casos.",
+          "Porque implementa grafos direcionados automaticamente.",
+          "Porque força bruta é inviável e a meta-heurística encontra solução muito boa em tempo hábil.",
+          "Porque elimina a necessidade de dados reais."
+        ],
+        answer: 2
+      },
+      {
+        question: "Em 'OtimizaLog' com Algoritmo Genético, o que é a função de aptidão (fitness)?",
+        options: [
+          "A distância total da rota (menor é melhor).",
+          "O número de mutações aplicadas.",
+          "O tamanho da população.",
+          "O tempo de CPU por geração."
+        ],
+        answer: 0
+      },
+      {
+        question: "No balanço exploração vs. explotação, o que é 'exploração'?",
+        options: [
+          "Refinar intensamente as melhores soluções atuais.",
+          "Visitar regiões novas do espaço de busca, mesmo que pareçam ruins no início.",
+          "Eliminar soluções duplicadas da população.",
+          "Aumentar a taxa de crossover entre os melhores."
+        ],
+        answer: 1
+      },
+      {
+        question: "Qual representação é mais adequada para um indivíduo (AG) no roteamento tipo TSP do 'OtimizaLog'?",
+        options: [
+          "Um vetor de custos fixos por aresta.",
+          "Uma permutação dos índices dos pontos/clientes.",
+          "Uma matriz binária cliente × dia.",
+          "Um vetor de pesos aleatórios sem restrições."
+        ],
+        answer: 1
+      },
+      {
+        question: "Qual mutação é clássica e segura para rotas no TSP/VRP?",
+        options: [
+          "Elitismo.",
+          "2-opt (inversão de um segmento da rota).",
+          "Crossover de um ponto.",
+          "Softmax."
+        ],
+        answer: 1
+      },
+      {
+        question: "Qual crossover é apropriado para preservar ordem relativa em rotas?",
+        options: [
+          "OX (Order Crossover).",
+          "Crossover de 1 ponto simples.",
+          "Crossover uniforme puro sem reparo.",
+          "Nenhum: AG não usa crossover."
+        ],
+        answer: 0
+      },
+      {
+        question: "Qual é um critério de parada comum nas meta-heurísticas?",
+        options: [
+          "Parar quando o fitness aumenta.",
+          "Após N iterações/gerações sem melhora do melhor fitness.",
+          "Parar na primeira melhoria observada.",
+          "Sempre após 1000 iterações."
+        ],
+        answer: 1
+      },
+      {
+        question: "No Simulated Annealing, qual expressão aproxima a probabilidade de aceitar uma solução pior?",
+        options: [
+          "Δ/T",
+          "exp(−Δ/T)",
+          "Δ × T",
+          "1/Δ"
+        ],
+        answer: 1
+      },
+      {
+        question: "Na Tabu Search, a lista tabu serve principalmente para:",
+        options: [
+          "Acelerar a ordenação das rotas.",
+          "Garantir o ótimo global.",
+          "Evitar ciclos e revisitar movimentos recentes.",
+          "Aumentar a temperatura do sistema."
+        ],
+        answer: 2
+      },
+      {
+        question: "Aumentar a taxa de mutação no AG tende a:",
+        options: [
+          "Aumentar a explotação.",
+          "Reduzir a diversidade.",
+          "Aumentar a exploração e a diversidade.",
+          "Diminuir a busca no espaço de soluções."
+        ],
+        answer: 2
+      },
+      {
+        question: "Inicializar parte da população com rota gulosa (Nearest Neighbor) tende a:",
+        options: [
+          "Sempre piorar o resultado final.",
+          "Acelerar a convergência, mas pode reduzir a diversidade.",
+          "Impedir alcançar ótimos globais.",
+          "Não afetar em nada."
+        ],
+        answer: 1
+      },
+      {
+        question: "Como lidar com restrições (capacidade/janelas de tempo) em 'OtimizaLog' usando AG?",
+        options: [
+          "Ignorar as restrições para acelerar.",
+          "Adicionar penalidades na função de fitness quando houver violações.",
+          "Remover clientes que violarem restrições.",
+          "Sortear novamente indivíduos inviáveis e seguir."
+        ],
+        answer: 1
+      },
+      {
+        question: "Por que usar multi-start (várias execuções com seeds/pontos iniciais diferentes)?",
+        options: [
+          "Evitar overfitting ao conjunto de treino.",
+          "Aumentar a chance de escapar de ótimos locais.",
+          "Reduzir o tempo de execução em hardware lento.",
+          "Substituir a necessidade de mutação."
+        ],
+        answer: 1
+      },
+      {
+        question: "Como garantir reprodutibilidade dos resultados nas meta-heurísticas?",
+        options: [
+          "Fixar a semente do gerador de números aleatórios.",
+          "Aumentar a população.",
+          "Usar GPU.",
+          "Normalizar as distâncias por média e desvio."
+        ],
+        answer: 0
+      },
+      {
+        question: "Na seleção por torneio, aumentar o tamanho K do torneio tende a:",
+        options: [
+          "Favorecer mais os indivíduos aptos (mais explotação).",
+          "Gerar mais exploração.",
+          "Não ter efeito mensurável.",
+          "Controlar a taxa de mutação."
+        ],
+        answer: 0
+      },
+      {
+        question: "No Simulated Annealing, qual parâmetro mais controla a aceitação de piores soluções ao longo do tempo?",
+        options: [
+          "A agenda de resfriamento/temperatura.",
+          "O tamanho da população.",
+          "A taxa de crossover.",
+          "O elitismo."
+        ],
+        answer: 0
+      }
+
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").textContent = `(${currentQuestion + 1}/${questions.length}) ${q.question}`;
+      const optionsList = document.getElementById("options");
+      optionsList.innerHTML = "";
+
+      q.options.forEach((opt, idx) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<label><input type="radio" name="option" value="${idx}"> ${opt}</label>`;
+        optionsList.appendChild(li);
+      });
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("Selecione uma opção!");
+        return;
+      }
+
+      const answer = parseInt(selected.value);
+      if (answer === questions[currentQuestion].answer) {
+        score++;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("question-box").innerHTML = `
+          <h2>Quiz Finalizado!</h2>
+          <p>Sua pontuação foi: <strong>${score}</strong> de ${questions.length}</p>
+        `;
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+
+</html>
