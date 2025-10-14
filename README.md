@@ -1,4 +1,4 @@
-# 📄 **Desafio: Machine Learning (Entrega entre 25/05 a 29/05)**
+# 📄 **Desafio: Machine Learning (Entrega entre 14/10 a 21/11)**
 
 ---
 
