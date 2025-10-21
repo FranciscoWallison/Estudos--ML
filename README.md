@@ -1,7 +1,4 @@
 # 📄 Desafio: Machine Learning (Entrega **14/10/2025 → 21/11/2025**)
-
-> Base de hoje: **21/10/2025 (terça)**
-
 ---
 
 ## 🎯 Objetivo
@@ -54,9 +51,9 @@ Aplicar conceitos de **Machine Learning** e/ou **Reforço (RL)** em um projeto p
 - **23/10**: tema definido + objetivos/algoritmos.
 - **28/10**: baseline rodando; métricas definidas.
 - **04/11**: experimento 1 (ε‑greedy) + gráficos iniciais.
-- **11/11**: experimento 2 (tuning/ablação) + tabelas.
-- **18/11**: *code freeze* + README final.
-- **Até 21/11 23:59**: envio do link (GitHub/GitLab ou ZIP no Drive).
+- **11/11**: experimento 2 (tuning/ablação) + tabelas. (INICIO DAS APRESENTAÇÕES)
+- **18/11**: *code freeze* + README final. (INICIO DAS APRESENTAÇÕES)
+- **Até 21/11 23:59**: envio do link (GitHub/GitLab ou ZIP no Drive). (INICIO DAS APRESENTAÇÕES)
 
 ---
 
