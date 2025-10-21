@@ -1,135 +1,181 @@
-# 📄 **Desafio: Machine Learning (Entrega entre 14/10 a 21/11)**
+# 📄 Desafio: Machine Learning (Entrega **14/10/2025 → 21/11/2025**)
+
+> Base de hoje: **21/10/2025 (terça)**
 
 ---
 
-## 🎯 **Objetivo do Projeto:**
-Aplicar conceitos de **Machine Learning** e **Aprendizado por Reforço** (Reinforcement Learning) em um projeto prático.
+## 🎯 Objetivo
+Aplicar conceitos de **Machine Learning** e/ou **Reforço (RL)** em um projeto prático.
 
 ---
 
-## **Regras Gerais:**
+## Regras
+- Tema livre, **desde que** use ML/RL (ex.: MDPs, Q-Learning, SARSA, supervis./não‑supervis., etc.).
+- Entrega deve incluir:
+  - **Código-fonte** completo.
+  - **README.md** com: ideia, mudanças, como treinar/testar, bibliotecas, algoritmos, **cálculos**, dificuldades, **resultados com métricas/gráficos**.
+- **Visual obrigatório**: gráficos/tabelas/prints mostrando evolução/treinamento/resultados.
+- Pode ser pequeno. **Foco: raciocínio aplicado de ML.**
 
-- O **tema do projeto é livre**, mas deve obrigatoriamente ter **relação com aprendizado de máquina** (ex.: ambientes, MDPs, Q-Learning, SARSA, Aprendizagem Supervisionada ou Não Supervisionada, etc.).
-- A entrega deve incluir:
-  - Código-fonte na tecnologia de sua preferência.
-  - Um **arquivo README.md** explicando:
-    - A ideia do seu projeto.
-    - O que foi alterado ou adicionado.
-    - Como treinar e testar o agente ou modelo.
-    - Bibliotecas utilizadas.
+---
+
+## 📚 Conteúdo mínimo
+- Trade-off **exploração vs. aproveitamento** (exploration vs. exploitation).
+- **Atualização dinâmica** de aprendizado (Q-Table ou equivalente).
+- **Ajuste da taxa de exploração** (ex.: *epsilon decay*).
+- **Recompensa e penalidade** (design de *reward*).
+- **Visualização** de métricas/comportamento aprendido.
+
+---
+
+## 📦 Formato da entrega
+- **Pasta do projeto** com:
+  - Código-fonte.
+  - `README.md` organizado:
+    - Introdução.
+    - Tecnologias/bibliotecas.
     - Algoritmos aplicados.
-    - Cálculos realizados.
-    - Dificuldades encontradas.
-    - Resultados obtidos (com métricas ou gráficos, se possível).
-- **Apresentação visual obrigatória:**  
-  - Gráficos, tabelas ou prints que representem a evolução, treinamento, resultados ou comportamento do modelo/algoritmo.
-- O projeto pode ser pequeno. **O foco é no raciocínio aplicado de ML**, não no tamanho.
-
----
-
-## 📚 **Conteúdo mínimo obrigatório:**
-
-- Redução de incertezas (exploração vs. exploração).
-- Atualização dinâmica de aprendizado (Q-Table ou alternativa equivalente).
-- Ajuste de taxa de exploração.
-- Aplicação de conceitos de recompensa e penalidade.
-- Visualização de métricas ou comportamento aprendido.
-
----
-
-## 📦 **Formato da Entrega:**
-
-- **Pasta do Projeto contendo:**
-  - Código-fonte completo.
-  - README.md organizado contendo:
-    - Introdução ao projeto.
-    - Tecnologias e bibliotecas utilizadas.
-    - Algoritmos aplicados.
-    - Cálculos e fórmulas utilizados.
-    - Como executar o projeto.
+    - Cálculos/fórmulas.
+    - Como executar (treinar/testar).
     - Resultados e comentários finais.
-- Nome do projeto:  
+- **Nome do projeto**:
   ```bash
   NomeDoMeuProjeto-<sua_matricula>-<seu_nome_ou_tema>
   ```
 
 ---
 
-## 🛠️ **Commit Inicial (Obrigatório):**
+## 🗓️ Prazos (corrigidos)
+- **Janela oficial de entrega**: **14/10/2025 → 21/11/2025 (sex, 23:59)**.
+- Datas antigas do enunciado (02/05, 25/05, 29/05) **desconsiderar**.
 
-O primeiro commit deve incluir **as configurações iniciais** e uma **breve descrição da ideia do projeto** no `README.md`.
+### Cronograma sugerido (curto)
+- **21/10**: repositório + **commit INIT** com README rascunho e cabeçalhos nos arquivos.
+- **23/10**: tema definido + objetivos/algoritmos.
+- **28/10**: baseline rodando; métricas definidas.
+- **04/11**: experimento 1 (ε‑greedy) + gráficos iniciais.
+- **11/11**: experimento 2 (tuning/ablação) + tabelas.
+- **18/11**: *code freeze* + README final.
+- **Até 21/11 23:59**: envio do link (GitHub/GitLab ou ZIP no Drive).
+
+---
+
+## 🛠️ Commit inicial (obrigatório)
+Inclui **configuração inicial** e breve descrição da ideia no `README.md`.
 
 ```bash
+git init
 git add .
 git commit -m "ADS-init: <sua_matricula> ML"
+git branch -M main
+git remote add origin <URL_DO_REPO>
+git push -u origin main
 ```
 
-**Objetivo do INIT:**  
-- Garantir um histórico de evolução limpo e organizado.
-- Todos os arquivos devem conter no cabeçalho:
-  - Data de criação.
-  - Nome do autor.
-  - Matrícula.
-  - Breve descrição do que o arquivo implementa.
+### Cabeçalho padrão em **todos os arquivos**
+```py
+"""
+Nome do arquivo: <ex.: train_model.py>
+Data de criação: 21/10/2025
+Autor: <Seu Nome>
+Matrícula: <Sua Matrícula>
 
-### 📋 **Exemplo de Documentação nos Arquivos:**
-```js
-/**
- * Nome do arquivo: train_model.py
- * Data de criação: 25/05/2025
- * Autor: João Silva
- * Matrícula: 123456
- *
- * Descrição:
- * Este código tem como objetivo treinar um agente para encontrar o caminho ótimo em um ambiente customizado utilizando Q-Learning.
- * Funcionalidades:
- * - Inicialização do ambiente
- * - Treinamento com política epsilon-greedy
- * - Geração de gráficos de recompensa média
- */
+Descrição:
+<objetivo do arquivo>
+Funcionalidades:
+- <ponto 1>
+- <ponto 2>
+"""
 ```
 
 ---
 
-## 📆 **Prazos:**
-
-- **Tudo feito e apresentado para professor antes até o dia:** 25/05  
-- **Data final de entrega:** 29/05 (até 23h59)  
-- **Forma de entrega:** Link do repositório (GitHub, GitLab ou pasta zipada via Drive compartilhado).
-
-
-> Data de entrega: **02/05/2025** (sexta-feira)  
->  
-> Peço, por favor, que até essa data o seu tema já esteja commitando no repositorio no github
->  
-> Se houver qualquer impedimento ou necessidade de ajuste no cronograma, é importante que eu seja avisado com antecedência para podermos realinhar.  
-
-
-
----
-
-## **Critérios de Avaliação:**
-
-| Critério                          | Peso   |
-|------------------------------------|--------|
-| Apresentaçõa | 30%    |
-| Aplicação correta de conceitos de ML | 10%    |
-| Criatividade e complexidade técnica | 10%    |
-| Clareza e organização do código    | 10%    |
-| Documentação completa e visualização dos resultados | 10%    |
-
-### Só irei aceitar com tudo feito se não quiser fazer o desafio pode fazer av2.
-
-
-## **Política de Integridade Acadêmica:**
-
-- Trabalhos entregues **sem entendimento claro do aluno** poderão ser anulados mediante questionamento.
-- Projetos **copiados de outros colegas** ou **plagiados da internet** serão **zerados**.
-- **Geração automática** de código via IA sem adaptação, entendimento e explicação **também poderá ser desconsiderada**.
-- **Reaproveitamento de trabalhos anteriores** sem aviso e sem adaptação para o contexto atual também será zerado.
-- O objetivo é **avaliar seu aprendizado real** sobre os temas estudados.
+## 🧱 Estrutura sugerida
+```text
+.
+├── src/
+│   ├── envs/              # ambientes/MDPs
+│   ├── agents/            # QLearning/SARSA/modelos
+│   ├── utils/             # métricas, plots, seed
+│   ├── train.py           # treino do agente/modelo
+│   └── eval.py            # avaliação e geração de gráficos
+├── experiments/
+│   ├── configs/           # hiperparâmetros (YAML/JSON)
+│   └── runs/              # logs, checkpoints, métricas
+├── results/               # figuras/tabelas finais
+├── requirements.txt
+└── README.md
+```
 
 ---
 
-# ✨ **Mensagem Final:**
-> Lembre-se: o objetivo não é apenas programar, mas **aplicar Machine Learning de forma estruturada**, com **raciocínio crítico** e **visualização dos resultados**! 🚀
+## ▶️ Como executar
+### 1) Ambiente
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux/macOS:
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2) Treinar
+```bash
+python -m src.train --algo qlearning --episodes 2000 --env GridWorld-v0   --epsilon_start 1.0 --epsilon_min 0.05 --epsilon_decay 0.995   --alpha 0.1 --gamma 0.99 --seed 42 --out experiments/runs/run1
+```
+
+### 3) Avaliar e gerar gráficos
+```bash
+python -m src.eval --run experiments/runs/run1 --episodes 200 --render false   --export results/
+```
+
+> **Reprodutibilidade**: fixe *seed*, salve hiperparâmetros e versões de libs.
+
+---
+
+## 📊 Métricas e visualizações
+- Recompensa média/episódio (curva).
+- Taxa de sucesso/episódio.
+- Evolução de **ε (epsilon)** ao longo do treino.
+- Heatmap da **Q‑Table** (ou curvas de perda/acc se supervisionado).
+- Tabelas comparando ablações (ex.: *alpha*, *gamma*, *epsilon_decay*).
+
+---
+
+## 🧮 Algoritmos e fórmulas (exemplo Q‑Learning)
+Atualização Q:
+\[
+Q(s,a) \leftarrow Q(s,a) + \alpha \big[r + \gamma \max_{a'} Q(s',a') - Q(s,a)\big]
+\]
+
+Política ε‑greedy:
+- Com prob. **ε**: escolhe ação aleatória (exploração).
+- Com prob. **1‑ε**: escolhe \(\arg\max_a Q(s,a)\) (aproveitamento).
+- **Decaimento**: \(\epsilon_t = \max(\epsilon_{\min}, \epsilon_0 \cdot d^t)\).
+
+> Se usar outro algoritmo (SARSA, DQN, supervisão), documente a fórmula equivalente.
+
+---
+
+## ✅ Checklist de entrega
+- [ ] Código completo e **executável**.
+- [ ] **README** com ideia, passos de treino/teste, libs, algoritmos e **fórmulas**.
+- [ ] **Gráficos/prints** no `results/`.
+- [ ] Cabeçalho padrão em **todos os arquivos**.
+- [ ] `requirements.txt` com versões.
+- [ ] Link do repositório enviado **até 21/11/2025 23:59**.
+
+---
+
+## 🔍 Integridade acadêmica
+- Entregas sem entendimento claro podem ser **anuladas**.
+- Cópia/plágio serão **zerados**.
+- Uso de IA sem **adaptação e explicação** pode ser **desconsiderado**.
+- Reaproveitamento de trabalhos anteriores: só com **aviso** e **adaptação**.
+
+---
+
+## 📌 Observações finais
+- Mantenha o histórico de commits limpo.
+- Documente **dificuldades** e **decisões** de design de *reward*/hiperparâmetros.
+- Priorize clareza sobre tamanho do projeto.
