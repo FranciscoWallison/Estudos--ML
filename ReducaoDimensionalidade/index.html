@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redução de Dimensionalidade — PCA vs Random Projection</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #121821;
+      --accent: #4ade80;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --card: #0f1622;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 800px at 70% -10%, #16202e 0%, var(--bg) 40%);
+      color: var(--text);
+    }
+    header { padding: 24px; border-bottom: 1px solid var(--border); background: rgba(18,24,33,.6); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 5; }
+    h1 { margin: 0; font-size: 20px; letter-spacing: .2px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
+    @media (max-width: 980px){ .grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .controls h2 { margin: 0 0 12px; font-size: 16px; color: var(--muted); font-weight: 600; }
+    .control { margin-bottom: 14px; }
+    .control label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .control input[type=range] { width: 100%; }
+    .row { display: flex; gap: 8px; align-items: center; }
+    .btn {
+      background: linear-gradient(180deg, #1f2a38, #17202b);
+      color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; font-size: 13px; cursor: pointer;
+      transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .btn:hover { border-color: #2b3a4f; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .btn:active { transform: translateY(1px); }
+    .accent { border-color: #244f39; background: linear-gradient(180deg, #1f3b2b, #14261c); }
+    .switch { display: inline-flex; gap: 10px; align-items: center; }
+    .switch input { accent-color: var(--accent); }
+
+    .plots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 1200px){ .plots { grid-template-columns: 1fr; } }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .card h3 { margin: 0 0 8px; font-size: 14px; color: var(--muted); font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+    canvas { width: 100%; height: 320px; border-radius: 12px; background: linear-gradient(180deg, #0d1320, #0b111b); border: 1px solid #111827; display: block; }
+    small.badge { border: 1px solid var(--border); padding: 3px 8px; border-radius: 999px; color: #cbd5e1; }
+    .legend { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+    .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Redução de Dimensionalidade — <span style="color: var(--accent)">PCA</span> vs <span style="color:#60a5fa">Random Projection</span></h1>
+  </header>
+
+  <div class="container">
+    <div class="grid">
+      <!-- Controls -->
+      <section class="panel controls">
+        <h2>Parâmetros</h2>
+
+        <div class="control">
+          <label for="nPoints"># Pontos: <span id="nPointsVal">600</span></label>
+          <input type="range" id="nPoints" min="50" max="2000" step="50" value="600">
+        </div>
+
+        <div class="control">
+          <label for="noise">Ruído (σ): <span id="noiseVal">0.20</span></label>
+          <input type="range" id="noise" min="0" max="1" step="0.01" value="0.20">
+        </div>
+
+        <div class="control switch">
+          <input type="checkbox" id="twoClusters" checked>
+          <label for="twoClusters">Dois clusters</label>
+        </div>
+
+        <div class="control switch">
+          <input type="checkbox" id="elongated" checked>
+          <label for="elongated">Alongar variância (anisotrópico)</label>
+        </div>
+
+        <div class="control">
+          <button class="btn accent" id="regen">Regenerar dados</button>
+          <button class="btn" id="reshuffle">Random Projection novo</button>
+        </div>
+
+        <div class="control">
+          <details>
+            <summary style="cursor:pointer;color:var(--muted)">O que está acontecendo?</summary>
+            <ul style="margin-top:8px; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.6">
+              <li><b>PCA</b>: calcula os <i>autovetores</i> da covariância (componentes principais). Projetamos em 2 eixos que explicam mais variância.</li>
+              <li><b>Random Projection</b>: projeta com uma matriz aleatória (Johnson–Lindenstrauss). Mais simples, preserva distâncias aprox. em alta dimensão.</li>
+              <li>Esquerda: dados em 3D (rotação animada). Meio: projeção PCA (2D). Direita: projeção aleatória (2D).</li>
+            </ul>
+          </details>
+        </div>
+      </section>
+
+      <!-- Plots -->
+      <section class="panel">
+        <div class="plots">
+          <div class="card">
+            <h3>Espaço 3D (visualização)<small class="badge" id="var3d">D=3</small></h3>
+            <div class="legend"><span class="dot" style="background:#22d3ee"></span>Cluster A <span class="dot" style="background:#f472b6"></span>Cluster B</div>
+            <canvas id="plot3d" width="480" height="320"></canvas>
+          </div>
+          <div class="card">
+            <h3>Projeção 2D — PCA <small class="badge" id="varPCA">var. explicada</small></h3>
+            <canvas id="plotPCA" width="480" height="320"></canvas>
+          </div>
+          <div class="card">
+            <h3>Projeção 2D — Random <small class="badge" id="varRP">matriz aleatória</small></h3>
+            <canvas id="plotRP" width="480" height="320"></canvas>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ===== util =====
+    const randn = (() => { // Box–Muller
+      let spare, hasSpare = false;
+      return (mu=0, sigma=1) => {
+        if (hasSpare){ hasSpare=false; return spare*sigma + mu; }
+        let u,v,s; do { u=Math.random()*2-1; v=Math.random()*2-1; s=u*u+v*v; } while(!s || s>=1);
+        const m = Math.sqrt(-2*Math.log(s)/s);
+        spare = v*m; hasSpare=true; return mu + sigma*u*m;
+      };
+    })();
+
+    const add = (a,b)=>a.map((v,i)=>v+b[i]);
+    const sub = (a,b)=>a.map((v,i)=>v-b[i]);
+    const dot = (a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+    const norm = (a)=>Math.hypot(...a);
+    const scale = (a,s)=>a.map(v=>v*s);
+
+    function mean(X){
+      const n=X.length, d=X[0].length; const m=new Array(d).fill(0);
+      for(const x of X){ for(let j=0;j<d;j++) m[j]+=x[j]; }
+      for(let j=0;j<d;j++) m[j]/=n; return m;
+    }
+
+    function center(X){
+      const m=mean(X); return X.map(x=>sub(x,m));
+    }
+
+    function cov(X){ // X: n x d, centered
+      const n=X.length, d=X[0].length; const C=[...Array(d)].map(()=>Array(d).fill(0));
+      for(const x of X){
+        for(let i=0;i<d;i++) for(let j=i;j<d;j++){ C[i][j]+=x[i]*x[j]; }
+      }
+      for(let i=0;i<d;i++) for(let j=i;j<d;j++){ C[i][j]/=n; C[j][i]=C[i][j]; }
+      return C;
+    }
+
+    function matVec(M, v){ const d=M.length; const out=new Array(d).fill(0); for(let i=0;i<d;i++) for(let j=0;j<d;j++) out[i]+=M[i][j]*v[j]; return out; }
+
+    function powerIter(C, iters=60){
+      const d=C.length; let v = Array.from({length:d}, ()=>Math.random());
+      v = scale(v, 1/(norm(v)||1));
+      for(let k=0;k<iters;k++){
+        let Cv = matVec(C, v);
+        const nrm = norm(Cv)||1; v = scale(Cv, 1/nrm);
+      }
+      const lambda = dot(v, matVec(C,v));
+      return {vec:v, val:lambda};
+    }
+
+    function projectPCA(X){ // returns {Y, comps:[v1,v2], evals:[l1,l2], explained}
+      const Xc = center(X);
+      const C = cov(Xc);
+      const pc1 = powerIter(C, 80);
+      // deflate
+      const d = C.length;
+      const outer = [...Array(d)].map(()=>Array(d).fill(0));
+      for(let i=0;i<d;i++) for(let j=0;j<d;j++) outer[i][j] = pc1.val * pc1.vec[i]*pc1.vec[j];
+      const C2 = [...Array(d)].map((_,i)=>Array(d).fill(0));
+      for(let i=0;i<d;i++) for(let j=0;j<d;j++) C2[i][j] = C[i][j] - outer[i][j];
+      const pc2 = powerIter(C2, 80);
+
+      const v1 = pc1.vec, v2 = pc2.vec;
+      const Y = Xc.map(x=>[dot(x,v1), dot(x,v2)]);
+
+      const tr = C.reduce((s,row,i)=>s+row[i],0);
+      const explained = (pc1.val + pc2.val)/ (tr||1);
+      return {Y, comps:[v1,v2], evals:[pc1.val, pc2.val], explained};
+    }
+
+    function projectRandom(X, seed=null){
+      const d = X[0].length;
+      const R = [...Array(d)].map(()=>[randn(0,1/Math.sqrt(d)), randn(0,1/Math.sqrt(d))]);
+      const Xc = center(X);
+      const Y = Xc.map(x=>[ dot(x, [R[0][0],R[1][0],R[2][0]]), dot(x, [R[0][1],R[1][1],R[2][1]]) ]);
+      return {Y, R};
+    }
+
+    // ===== data generation (3D) =====
+    function genData(n=600, noise=0.2, two=true, elongated=true){
+      const X=[], y=[];
+      const means = two ? [[-2,0,0],[2,0,0]] : [[0,0,0]];
+      const A = elongated ? [3.0, 1.2, 0.4] : [1.0,1.0,1.0];
+      for(let i=0;i<n;i++){
+        const m = means[two ? (i%2) : 0];
+        // anisotropic Gaussian around mean m
+        let x = [randn(0,A[0]), randn(0,A[1]), randn(0,A[2])];
+        x = add(x, m);
+        // extra noise
+        x = add(x, [randn(0,noise), randn(0,noise), randn(0,noise)]);
+        X.push(x); y.push(two ? (i%2) : 0);
+      }
+      return {X,y};
+    }
+
+    // ===== drawing helpers =====
+    function fit2D(Y, ctx){
+      const w=ctx.canvas.width, h=ctx.canvas.height; const pad=24;
+      let minx=Infinity, maxx=-Infinity, miny=Infinity, maxy=-Infinity;
+      for(const [x,y] of Y){ if(x<minx)minx=x; if(x>maxx)maxx=x; if(y<miny)miny=y; if(y>maxy)maxy=y; }
+      const sx = (w-2*pad)/((maxx-minx)||1); const sy = (h-2*pad)/((maxy-miny)||1);
+      return (p)=>{
+        const x = pad + (p[0]-minx)*sx;
+        const y = h - pad - (p[1]-miny)*sy; // invert y
+        return [x,y];
+      };
+    }
+
+    function draw2D(ctx, Y, y, colorA="#22d3ee", colorB="#f472b6"){ ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+      const to = fit2D(Y, ctx);
+      ctx.globalAlpha = 0.9;
+      for(let i=0;i<Y.length;i++){
+        const [x,y2] = to(Y[i]);
+        ctx.beginPath(); ctx.arc(x,y2, 2.2, 0, Math.PI*2);
+        ctx.fillStyle = (y && y[i]===1) ? colorB : colorA; ctx.fill();
+      }
+    }
+
+    // 3D rotating preview (orthographic)
+    function draw3D(ctx, X, y, t){
+      ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+      const w=ctx.canvas.width, h=ctx.canvas.height, pad=24;
+      const ax = 0.6 + 0.4*Math.sin(t*0.8), ay = t*0.4; // angles
+      const sx=Math.sin(ax), cx=Math.cos(ax), sy=Math.sin(ay), cy=Math.cos(ay);
+      // rotate
+      const R = (p)=>{ // Ry * Rx
+        const [x,y,z]=p;
+        const xx = x*cy + z*sy;
+        const zz = -x*sy + z*cy;
+        const yy = y*cx - zz*sx;
+        const zz2 = y*sx + zz*cx;
+        return [xx, yy, zz2];
+      };
+      const Xr = X.map(R);
+      // fit 3D to canvas using x,y only
+      let minx=Infinity,maxx=-Infinity,miny=Infinity,maxy=-Infinity;
+      for(const [x,y,z] of Xr){ if(x<minx)minx=x; if(x>maxx)maxx=x; if(y<miny)miny=y; if(y>maxy)maxy=y; }
+      const sx2 = (w-2*pad)/((maxx-minx)||1); const sy2=(h-2*pad)/((maxy-miny)||1);
+      ctx.globalAlpha = 0.9;
+      for(let i=0;i<Xr.length;i++){
+        const p = Xr[i];
+        const x = pad + (p[0]-minx)*sx2;
+        const y2 = h - pad - (p[1]-miny)*sy2;
+        const depth = (p[2]);
+        const r = 2.0 + 0.8*((depth+3)/6); // size by depth
+        ctx.beginPath(); ctx.arc(x,y2,r,0,Math.PI*2);
+        ctx.fillStyle = (y && y[i]===1) ? "#f472b6" : "#22d3ee";
+        ctx.fill();
+      }
+    }
+
+    // ===== main app =====
+    const els = {
+      n: document.getElementById('nPoints'),
+      nVal: document.getElementById('nPointsVal'),
+      noise: document.getElementById('noise'),
+      noiseVal: document.getElementById('noiseVal'),
+      two: document.getElementById('twoClusters'),
+      elongated: document.getElementById('elongated'),
+      regen: document.getElementById('regen'),
+      reshuffle: document.getElementById('reshuffle'),
+      plot3d: document.getElementById('plot3d'),
+      plotPCA: document.getElementById('plotPCA'),
+      plotRP: document.getElementById('plotRP'),
+      varPCA: document.getElementById('varPCA'),
+    };
+
+    let data = genData();
+    let rpSeed = Math.random();
+
+    function recomputeAndDraw(){
+      const {X,y} = data;
+      // PCA
+      const pca = projectPCA(X);
+      draw2D(els.plotPCA.getContext('2d'), pca.Y, y);
+      els.varPCA.textContent = `var. explicada ~ ${(pca.explained*100).toFixed(1)}%`;
+      // Random
+      const rp = projectRandom(X, rpSeed);
+      draw2D(els.plotRP.getContext('2d'), rp.Y, y, "#22d3ee", "#f472b6");
+    }
+
+    function regenerate(){
+      const n = +els.n.value; els.nVal.textContent = n;
+      const noise = +els.noise.value; els.noiseVal.textContent = noise.toFixed(2);
+      const two = els.two.checked; const elongated = els.elongated.checked;
+      data = genData(n, noise, two, elongated);
+      recomputeAndDraw();
+    }
+
+    els.n.addEventListener('input', regenerate);
+    els.noise.addEventListener('input', regenerate);
+    els.two.addEventListener('change', regenerate);
+    els.elongated.addEventListener('change', regenerate);
+    els.regen.addEventListener('click', regenerate);
+    els.reshuffle.addEventListener('click', ()=>{ rpSeed=Math.random(); recomputeAndDraw(); });
+
+    // 3D animation
+    const ctx3d = els.plot3d.getContext('2d');
+    let t=0; function tick(){ t+=0.016; draw3D(ctx3d, data.X, data.y, t); requestAnimationFrame(tick); }
+
+    // initial render
+    regenerate();
+    tick();
+  </script>
+</body>
+</html>
