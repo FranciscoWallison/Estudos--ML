@@ -44,9 +44,8 @@ Aplicar conceitos de **Machine Learning** e/ou **Reforço (RL)** em um projeto p
 
 ## 🗓️ Prazos (corrigidos)
 - **Janela oficial de entrega**: **14/10/2025 → 21/11/2025 (sex, 23:59)**.
-- Datas antigas do enunciado (02/05, 25/05, 29/05) **desconsiderar**.
 
-### Cronograma sugerido (curto)
+### Cronograma
 - **21/10**: repositório + **commit INIT** com README rascunho e cabeçalhos nos arquivos.
 - **23/10**: tema definido + objetivos/algoritmos.
 - **28/10**: baseline rodando; métricas definidas.
