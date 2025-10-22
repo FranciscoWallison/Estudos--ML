@@ -1,4 +1,4 @@
-# 📄 Desafio: Machine Learning (Entrega **14/10/2025 → 21/11/2025**)
+# 📄 Desafio: Machine Learning (Entrega **14/10/2025 → 25/11/2025**)
 ---
 
 ## 🎯 Objetivo
@@ -43,7 +43,7 @@ Aplicar conceitos de **Machine Learning** e/ou **Reforço (RL)** em um projeto p
 ---
 
 ## 🗓️ Prazos (corrigidos)
-- **Janela oficial de entrega**: **14/10/2025 → 21/11/2025 (sex, 23:59)**.
+- **Janela oficial de entrega**: **14/10/2025 → 25/11/2025 (sex, 23:59)**.
 
 ### Cronograma
 - **21/10**: repositório + **commit INIT** com README rascunho e cabeçalhos nos arquivos.
@@ -52,7 +52,7 @@ Aplicar conceitos de **Machine Learning** e/ou **Reforço (RL)** em um projeto p
 - **04/11**: experimento 1 (ε‑greedy) + gráficos iniciais.
 - **11/11**: experimento 2 (tuning/ablação) + tabelas. (INICIO DAS APRESENTAÇÕES)
 - **18/11**: *code freeze* + README final. (INICIO DAS APRESENTAÇÕES)
-- **Até 21/11 23:59**: envio do link (GitHub/GitLab ou ZIP no Drive). (INICIO DAS APRESENTAÇÕES)
+- **Até 25/11 23:59**: envio do link (GitHub/GitLab ou ZIP no Drive). (INICIO DAS APRESENTAÇÕES)
 
 ---
 
@@ -72,7 +72,7 @@ git push -u origin main
 ```py
 """
 Nome do arquivo: <ex.: train_model.py>
-Data de criação: 21/10/2025
+Data de criação: 25/10/2025
 Autor: <Seu Nome>
 Matrícula: <Sua Matrícula>
 
@@ -159,7 +159,7 @@ Política ε‑greedy:
 - [ ] **Gráficos/prints** no `results/`.
 - [ ] Cabeçalho padrão em **todos os arquivos**.
 - [ ] `requirements.txt` com versões.
-- [ ] Link do repositório enviado **até 21/11/2025 23:59**.
+- [ ] Link do repositório enviado **até 25/11/2025 23:59**.
 
 ---
 
